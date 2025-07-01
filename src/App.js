@@ -90,7 +90,7 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#06234b] to-[#00c6ff] px-4 py-6">
+    <div className="min-h-dvh flex justify-center items-center p-4 bg-gradient-to-br from-[#06234b] to-[#00c6ff]">
   <div className="w-full max-w-[400px] h-[90vh] sm:h-[85vh] bg-[rgb(11,77,131)] rounded-3xl shadow-xl p-4 sm:p-6 text-white space-y-6 border-4 border-sky-400 overflow-y-auto">
 
         <div className="relative">
