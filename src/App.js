@@ -90,9 +90,9 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen justify-center flex p-4 bg-gradient-to-br from-[#06234b] to-[#00c6ff]">
-      <div className="max-w-sm w-full bg-[rgb(11,77,131)] rounded-3xl shadow-xl p-6 text-white space-y-6 border-4 border-sky-400">
-        {/* Search Bar */}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#06234b] to-[#00c6ff] px-4 py-6">
+  <div className="w-full max-w-[400px] h-[90vh] sm:h-[85vh] bg-[rgb(11,77,131)] rounded-3xl shadow-xl p-4 sm:p-6 text-white space-y-6 border-4 border-sky-400 overflow-y-auto">
+
         <div className="relative">
           <input
             type="text"
