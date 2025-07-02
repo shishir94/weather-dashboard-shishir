@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
+import Loader from "./loader";
 
 const API_KEY = "ae03b5e45797b1e8b97bd6383448438a";
-
-// "https://openweathermap.org/img/w/01d.png"  --> for icon
-// api.openweathermap.org/data/2.5/forecast?q={city name}&appid={API key}
 
 function App() {
   const [city, setCity] = useState("");
@@ -13,12 +11,12 @@ function App() {
   const [forecast, setForecast] = useState([]);
   const [error, setError] = useState("");
   const [forecasterror, setForecasterror] = useState("");
+  const [isLoading,setIsLoading] = useState(false);
 
   const fetchWeather = async () => {
     const cityToSearch = city.trim() === "" ? "Agra" : city.trim();
-    // console.log(cityToSearch);
     setError("");
-
+    setIsLoading(true);
     try {
       const res = await fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${cityToSearch}&appid=${API_KEY}&units=metric`
@@ -29,7 +27,6 @@ function App() {
       }
 
       const data = await res.json();
-      // console.log(data);
 
       setWeather({
         temp: Math.round(data.main.temp) + "°",
@@ -37,16 +34,21 @@ function App() {
         description: data.weather[0].description,
         icon: data.weather[0].icon,
         wind: data.wind.speed + "mph",
+        feels_like: Math.round(data.main.feels_like) + "°",
       });
     } catch (er) {
       setError("City not found");
       setWeather(null);
+    }
+    finally{
+      setIsLoading(false);
     }
   };
 
   const fetchForeCast = async () => {
     const cityToSearch = city.trim() === "" ? "Agra" : city.trim();
     setForecasterror("");
+    setIsLoading(true);
     try {
       const res = await fetch(
         `https://api.openweathermap.org/data/2.5/forecast?q=${cityToSearch}&appid=${API_KEY}&units=metric`
@@ -57,7 +59,6 @@ function App() {
       }
 
       const data = await res.json();
-      // console.log(data);
 
       const filtered = data.list.filter((item) =>
         item.dt_txt.includes("12:00:00")
@@ -76,6 +77,9 @@ function App() {
       setForecasterror("Unable to load Forecast");
       setForecast([]);
     }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   const handleSearch = () => {
@@ -91,8 +95,7 @@ function App() {
 
   return (
     <div className="min-h-dvh flex justify-center items-center p-4 bg-gradient-to-br from-[#06234b] to-[#00c6ff]">
-  <div className="w-full max-w-[400px] h-[90vh] sm:h-[85vh] bg-[rgb(11,77,131)] rounded-3xl shadow-xl p-4 sm:p-6 text-white space-y-6 border-4 border-sky-400 overflow-y-auto">
-
+      <div className="w-full max-w-[400px] h-[90vh] sm:h-[85vh] bg-[rgb(11,77,131)] rounded-3xl shadow-xl p-4 sm:p-6 text-white space-y-6 border-4 border-sky-400 overflow-y-auto">
         <div className="relative">
           <input
             type="text"
@@ -112,9 +115,14 @@ function App() {
         </div>
 
         {/* error handling */}
-
         {error && (
           <div className="text-red-500 justify-center flex">{error}</div>
+        )}
+
+        {isLoading && (
+          <div className="justify-center flex">
+            <Loader />
+          </div>
         )}
 
         {/* Current weather div by default for Agra */}
@@ -134,7 +142,9 @@ function App() {
               <p className="capitalize text-[rgb(180,220,255)]">
                 {weather.description}
               </p>
-
+              <p className="text-sm text-[rgb(180,220,255)] mt-1">
+                Feels Like: {weather.feels_like}
+              </p>
               <div className="flex justify-between mt-3 text-[rgb(200,230,255)] text-sm">
                 <div className="flex flex-col items-start">
                   <span className="font-semibold text-white">Humidity</span>
@@ -150,7 +160,7 @@ function App() {
         )}
 
         {/* forecast unable to load */}
-        {forecasterror && (
+        {weather && forecasterror && (
           <div className="text-red-500 justify-center flex">
             {forecasterror}
           </div>
