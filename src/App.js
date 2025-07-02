@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Weather from "./components/Weather";
 import Forecast from "./components/Forecast";
 import Search from "./components/Search";
+import NotFoundImg from "/home/shishir94/weather-dashboard/src/assests/undraw_page-eaten_b2rt.svg";
 
 const API_KEY = "ae03b5e45797b1e8b97bd6383448438a";
 
@@ -128,7 +129,12 @@ function App() {
 
         {/* Error */}
         {error && (
-          <div className="text-red-500 justify-center flex">{error}</div>
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <img src={NotFoundImg} alt="Not Found" className="w-40 h-40" />
+            <p className="text-red-300 font-semibold">
+              Oops! We couldn't find that city.
+            </p>
+          </div>
         )}
 
         {/* Loader */}
